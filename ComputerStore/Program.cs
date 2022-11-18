@@ -6,13 +6,47 @@
 
 class Program {
     static void Main(string[] args) {
-        Computer c1 = new Computer("apple", "macbook pro 13 inches", 1000001, 2500);
-        Console.WriteLine(c1.findNumberOfCreatedComputers());
-        Computer c2 = new Computer("apple", "macbook pro 13 inches", 1000002, 2500);
-        Console.WriteLine(c2.findNumberOfCreatedComputers());
-        c1.showComputer();
-        c2.showComputer();
-        string equal = c1.isEqualTo(c2) ? "" : "not ";
-        Console.WriteLine($"V1 is {equal}equal to V2");
+        Console.WriteLine("**********************************************************************");
+        Console.WriteLine("            Welcome to Computer Store Management System!");
+        Console.WriteLine("**********************************************************************");
+        Console.WriteLine();
+        Console.Write("Please enter the maximum number of computers: ");
+        int maxComputers = Convert.ToInt32(Console.ReadLine());
+        Computer[] inventory = new Computer[maxComputers];
+
+        Console.WriteLine();
+        string option;
+        do {
+            Console.WriteLine("----------------------------------------------------------------------");
+            Console.WriteLine(" What do you want to do? ");
+            Console.WriteLine("    1 -> Enter new computers (password required) ");
+            Console.WriteLine("    2 -> Change information of a computer (password required) ");
+            Console.WriteLine("    3 -> Display all computers by a specific brand ");
+            Console.WriteLine("    4 -> Display all computers by a certain price ");
+            Console.WriteLine("    5 -> Quit");
+            Console.WriteLine("----------------------------------------------------------------------");
+            Console.Write("Your option: ");
+            option = Console.ReadLine() ?? "";
+
+            switch (option){
+                case "1":
+                    Console.WriteLine("Option 1 selected");
+                    break;
+                case "2":
+                    Console.WriteLine("Option 2 selected");
+                    break;
+                case "3":
+                    Console.WriteLine("Option 3 selected");
+                    break;
+                case "4":
+                    Console.WriteLine("Option 4 selected");
+                    break;
+                case "5":
+                    Console.WriteLine("Option 5 selected");
+                    break;
+                default:
+                    break;
+            }
+        } while(option != "5");
     }
 }
