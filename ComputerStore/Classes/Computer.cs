@@ -67,7 +67,7 @@ class Computer {
     }
 
     public void showComputer() {
-        Console.WriteLine($"-------- Computer ----------");
+        Console.WriteLine("-------- Computer ----------");
         Console.WriteLine($"Brand: {brand}");
         Console.WriteLine($"Model: {model}");
         Console.WriteLine($"Serial Number: {serialNumber}");

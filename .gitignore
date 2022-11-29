@@ -1,3 +1,4 @@
 ComputerStore/bin
 ComputerStore/obj
 *.docx
+.vscode/*
