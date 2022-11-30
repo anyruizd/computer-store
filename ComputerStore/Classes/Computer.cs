@@ -62,12 +62,11 @@ class Computer {
         return price;
     }
 
-    public int findNumberOfCreatedComputers () {
+    public static int findNumberOfCreatedComputers () {
         return computerNumber;
     }
 
     public void showComputer() {
-        Console.WriteLine("-------- Computer ----------");
         Console.WriteLine($"Brand: {brand}");
         Console.WriteLine($"Model: {model}");
         Console.WriteLine($"Serial Number: {serialNumber}");
