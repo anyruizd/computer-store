@@ -28,105 +28,23 @@ class Program {
             Console.Write("Your option: ");
             option = Console.ReadLine() ?? "";
             
-            bool validPwd = false;
 
             switch (option){
                 case "1":
-                    validPwd = validatePassword();
-
-                    if(!validPwd) {
-                        break;
-                    }
-                    message = "How many computers do you want to enter?: ";
-                    int computersToEnter = getInteger("Computer", message);
-                    if(computersToEnter > maxComputers) {
-                        Console.WriteLine();
-                        Console.WriteLine($"*** ERROR *** You can only enter {maxComputers} computers.");
-                        Console.WriteLine();
-                    } else {
-                        for (int i = 0; i < computersToEnter; i++){
-                            Console.WriteLine();
-                            Console.WriteLine($"Enter computer {i+1} information:");
-                            Console.WriteLine();
-                            inventory[i] = addComputer();
-                            maxComputers--;
-                        }
-                        Console.WriteLine();
-                        Console.WriteLine("*** Computers succesfully added! ***");
-                        Console.WriteLine();
-                    }
+                    maxComputers = enterNewComputers(maxComputers, inventory);
                     break;
                 case "2":
-                    validPwd = validatePassword();
-
-                    if(!validPwd) {
-                        break;
-                    }
-                    int enteredComputers = Computer.findNumberOfCreatedComputers();
-                    if(enteredComputers == 0 ) {
-                        Console.WriteLine();
-                        Console.WriteLine("*** ERROR *** There is no computers in the inventory! Please try adding one first.");
-                        Console.WriteLine();
-                        break;
-                    }
-
-                    message = "Which computer number do you wish to update?: ";
-                    int computerNumber = getInteger("Computer", message);
-
-                    if(computerNumber > enteredComputers) {
-                        Console.WriteLine();
-                        Console.WriteLine($"*** ERROR *** There is no computer with number {computerNumber}, would you like to add a new computer?");
-                        Console.WriteLine();
-                        Console.Write("Enter Y to enter a new computer, N to go back to the main menu: ");
-                        string choice = Console.ReadLine() ?? "";
-                        if(choice == "Y" || choice == "y") {
-                            if(enteredComputers == maxComputers) {
-                                Console.WriteLine();
-                                Console.WriteLine("*** ERROR *** You cannot enter more computers.");
-                                Console.WriteLine();
-                            } else {
-                                Console.WriteLine();
-                                Console.WriteLine($"Enter computer {enteredComputers} information:");
-                                Console.WriteLine();
-                                inventory[enteredComputers-1] = addComputer();
-                                maxComputers--;
-                                Console.WriteLine();
-                                Console.WriteLine("*** Computer succesfully added! ***");
-                                Console.WriteLine();
-                            }
-                        } else {
-                            Console.WriteLine();
-                            Console.WriteLine("*** Going back to main menu... ***");
-                            Console.WriteLine();
-                        }
-                        Console.WriteLine();
-                    } else {
-                        Console.WriteLine();
-                        Console.WriteLine($"-------- Computer # {computerNumber} ----------");
-                        inventory[computerNumber-1].showComputer();
-                        Console.WriteLine();
-                        string choice = "";
-                        do {
-                            Console.WriteLine("What information would you like to change? ");
-                            Console.WriteLine("    1 -> Brand");
-                            Console.WriteLine("    2 -> Model");
-                            Console.WriteLine("    3 -> Serial Number");
-                            Console.WriteLine("    4 -> Price");
-                            Console.WriteLine("    5 -> Quit");
-                            Console.Write("Enter your choice: ");
-                            choice = Console.ReadLine() ?? "";
-                            editComputer(choice, computerNumber, inventory);
-                        } while(choice != "5");
-                    };
+                    maxComputers = changeInformation(maxComputers, inventory);
                     break;
                 case "3":
-                    Console.WriteLine("Option 3 selected: Display all computers by a specific brand");
+                    displayByBrand(inventory);
                     break;
                 case "4":
                     Console.WriteLine("Option 4 selected: Display all computers by a certain price");
+                    displayByPrice(inventory);
                     break;
                 case "5":
-                    Console.WriteLine("Option 5 selected");
+                    Console.WriteLine("Leaving the application... Bye!");
                     break;
                 default:
                     Console.WriteLine();
@@ -198,8 +116,8 @@ class Program {
                 inventory[computerNumber-1].showComputer();
                 break;
             case "3":
-                Console.Write("Enter new serial number: ");
-                long newSerialNumber = Convert.ToInt64(Console.ReadLine() ?? "");
+                string message = "Enter new serial number: ";
+                long newSerialNumber = getLong("Serial number", message);
                 inventory[computerNumber-1].setSerialNumber(newSerialNumber);
                 Console.WriteLine();
                 Console.WriteLine("***  Serial number changed succesfully! ***");
@@ -207,8 +125,8 @@ class Program {
                 inventory[computerNumber-1].showComputer();
                 break;
             case "4":
-                Console.Write("Enter new price: ");
-                double newPrice = Convert.ToDouble(Console.ReadLine() ?? "");
+                message = "Enter new price: ";
+                double newPrice = getDouble("Price", message);
                 inventory[computerNumber-1].setPrice(newPrice);
                 Console.WriteLine();
                 Console.WriteLine("*** Price changed succesfully! ***");
@@ -277,5 +195,158 @@ class Program {
         } while (number < 1);
 
         return number;
+    }
+
+    static int enterNewComputers(int maxComputers, Computer [] inventory) {
+        bool validPwd = false;
+        validPwd = validatePassword();
+
+        if(!validPwd) {
+            return maxComputers;
+        }
+        string message = "How many computers do you want to enter?: ";
+        int computersToEnter = getInteger("Computer", message);
+        if(computersToEnter > maxComputers) {
+            Console.WriteLine();
+            Console.WriteLine($"*** ERROR *** You can only enter {maxComputers} computers.");
+            Console.WriteLine();
+        } else {
+            for (int i = 0; i < computersToEnter; i++){
+                Console.WriteLine();
+                Console.WriteLine($"Enter computer {i+1} information:");
+                Console.WriteLine();
+                inventory[i] = addComputer();
+                maxComputers--;
+            }
+            Console.WriteLine();
+            Console.WriteLine("*** Computers succesfully added! ***");
+            Console.WriteLine();
+        }
+        return maxComputers;
+    }
+    static int changeInformation(int maxComputers, Computer [] inventory) {
+        bool validPwd = false;
+        validPwd = validatePassword();
+
+        if(!validPwd) {
+            return maxComputers;
+        }
+        int enteredComputers = Computer.findNumberOfCreatedComputers();
+        if(enteredComputers == 0 ) {
+            Console.WriteLine();
+            Console.WriteLine("*** ERROR *** There is no computers in the inventory! Please try adding one first.");
+            Console.WriteLine();
+            return maxComputers;
+        }
+
+        string message = "Which computer number do you wish to update?: ";
+        int computerNumber = getInteger("Computer", message);
+
+        if(computerNumber > enteredComputers) {
+            Console.WriteLine();
+            Console.WriteLine($"*** ERROR *** There is no computer with number {computerNumber}, would you like to add a new computer?");
+            Console.WriteLine();
+            Console.Write("Enter Y to enter a new computer, N to go back to the main menu: ");
+            string choice = Console.ReadLine() ?? "";
+            if(choice == "Y" || choice == "y") {
+                if(enteredComputers == maxComputers) {
+                    Console.WriteLine();
+                    Console.WriteLine("*** ERROR *** You cannot enter more computers.");
+                    Console.WriteLine();
+                } else {
+                    Console.WriteLine();
+                    Console.WriteLine($"Enter computer {enteredComputers + 1} information:");
+                    Console.WriteLine();
+                    inventory[enteredComputers] = addComputer();
+                    maxComputers--;
+                    Console.WriteLine();
+                    Console.WriteLine("*** Computer succesfully added! ***");
+                    Console.WriteLine();
+                }
+            } else {
+                Console.WriteLine();
+                Console.WriteLine("*** Going back to main menu... ***");
+                Console.WriteLine();
+            }
+            Console.WriteLine();
+        } else {
+            Console.WriteLine();
+            Console.WriteLine($"-------- Computer # {computerNumber} ----------");
+            inventory[computerNumber-1].showComputer();
+            Console.WriteLine();
+            string choice = "";
+            do {
+                Console.WriteLine("What information would you like to change? ");
+                Console.WriteLine("    1 -> Brand");
+                Console.WriteLine("    2 -> Model");
+                Console.WriteLine("    3 -> Serial Number");
+                Console.WriteLine("    4 -> Price");
+                Console.WriteLine("    5 -> Quit");
+                Console.Write("Enter your choice: ");
+                choice = Console.ReadLine() ?? "";
+                editComputer(choice, computerNumber, inventory);
+            } while(choice != "5");
+        };
+
+        return maxComputers;
+    }
+
+    static void displayByBrand(Computer [] inventory){
+        int enteredComputers = Computer.findNumberOfCreatedComputers();
+        if(enteredComputers == 0 ) {
+            Console.WriteLine();
+            Console.WriteLine("*** ERROR *** There is no computers in the inventory! Please try adding one first.");
+            Console.WriteLine();
+            return;
+        }
+
+        Console.Write("Enter the brand you want to search: ");
+        string brand = Console.ReadLine() ?? "";
+        Console.WriteLine();
+        Console.WriteLine($"-------- Computers with brand {brand} ----------");
+        Console.WriteLine();
+        Boolean found = false;
+        for (int i = 0; i < Computer.findNumberOfCreatedComputers(); i++){
+            if(inventory[i].getBrand() == brand) {
+                found = true;
+                inventory[i].showComputer();
+                Console.WriteLine();
+            }
+        }
+        if(!found) {
+            Console.WriteLine();
+            Console.WriteLine("*** ERROR *** There is no computers in the inventory with this brand! Please try again.");
+            Console.WriteLine();
+        }
+    }
+
+    static void displayByPrice(Computer [] inventory){
+        int enteredComputers = Computer.findNumberOfCreatedComputers();
+        if(enteredComputers == 0 ) {
+            Console.WriteLine();
+            Console.WriteLine("*** ERROR *** There is no computers in the inventory! Please try adding one first.");
+            Console.WriteLine();
+            return;
+        }
+
+        string message = "Enter the price you want to search: ";
+        double price = getDouble("Price", message);
+        Console.WriteLine();
+        Console.WriteLine($"-------- Computers with price {price} ----------");
+        Console.WriteLine();
+        Boolean found = false;
+        for (int i = 0; i < Computer.findNumberOfCreatedComputers(); i++){
+            if(inventory[i].getPrice() == price) {
+                found = true;
+                inventory[i].showComputer();
+                Console.WriteLine();
+            }
+        }
+
+        if(!found) {
+            Console.WriteLine();
+            Console.WriteLine("*** ERROR *** There is no computers in the inventory with this price! Please try again.");
+            Console.WriteLine();
+        }
     }
 }
