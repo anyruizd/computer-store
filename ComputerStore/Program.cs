@@ -1,4 +1,6 @@
-﻿//  ------------------------------	
+﻿using System;
+using System.IO;
+//  ------------------------------	
 // Project 1
 // © Any Ruiz  https://github.com/anyruizd/computer-store
 // Written by: Any Ruiz 2230023
@@ -40,10 +42,11 @@ class Program {
                     displayByBrand(inventory);
                     break;
                 case "4":
-                    Console.WriteLine("Option 4 selected: Display all computers by a certain price");
                     displayByPrice(inventory);
                     break;
                 case "5":
+                    saveComputerList(inventory);
+                    showSavedList();
                     Console.WriteLine("Leaving the application... Bye!");
                     break;
                 default:
@@ -346,6 +349,31 @@ class Program {
         if(!found) {
             Console.WriteLine();
             Console.WriteLine("*** ERROR *** There is no computers in the inventory with this price! Please try again.");
+            Console.WriteLine();
+        }
+    }
+
+    static void saveComputerList(Computer[] inventory){
+        string myFilePath = @"./computer-list.txt";
+        StreamWriter sw = new StreamWriter(myFilePath);
+        for(int i = 0; i < Computer.findNumberOfCreatedComputers(); i++) {
+            sw.WriteLine($"-------- Computer # {i+1} ----------");
+            sw.WriteLine($"Brand: {inventory[i].getBrand()}");
+            sw.WriteLine($"Model: {inventory[i].getModel()}");
+            sw.WriteLine($"Serial Number: {inventory[i].getSerialNumber()}");
+            sw.WriteLine($"Price: {inventory[i].getPrice()}");
+        }
+        sw.Close();
+    }
+
+    static void showSavedList() {
+         string myFilePath = @"./computer-list.txt"; 
+        string[] lines = File.ReadAllLines(myFilePath);
+ 
+        foreach (string line in lines)
+        {
+            Console.WriteLine();
+            Console.WriteLine(line);
             Console.WriteLine();
         }
     }
