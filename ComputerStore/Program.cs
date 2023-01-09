@@ -236,7 +236,7 @@ class Program {
             Console.WriteLine($"*** ERROR *** You can only enter {maxComputers} computers.");
             Console.WriteLine();
         } else {
-            for (int i = 0; i < computersToEnter; i++){
+            for (int i = Computer.findNumberOfCreatedComputers(); i < computersToEnter; i++){
                 Console.WriteLine();
                 Console.WriteLine($"Enter computer {i+1} information:");
                 Console.WriteLine();
